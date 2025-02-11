@@ -9,7 +9,6 @@ authRouter.post("/signup", async (req, res) => {
     //validation of data
     validateSignUpData(req);
 
-    //encrypt password
     const {
       firstName,
       lastName,
@@ -20,6 +19,7 @@ authRouter.post("/signup", async (req, res) => {
       about,
       skills,
     } = req.body;
+    //encrypt password
     const passwordHash = await bcrypt.hash(password, 10);
     const user = new User({
       firstName,
@@ -43,10 +43,12 @@ authRouter.post("/login", async (req, res) => {
     const { emailId, password } = req.body;
     const user = await User.findOne({ emailId });
     if (!user) {
+      console.log("user not found");
       throw new Error("Invalid credentials");
     }
     const isPasswordValid = await user.validatePassword(password);
     if (!isPasswordValid) {
+      console.log("invalid password");
       throw new Error("Invalid credentials");
     } else {
       //create jwt token
@@ -56,7 +58,6 @@ authRouter.post("/login", async (req, res) => {
       //   expiresIn: "24h", //1d,1h
       // });
       const token = await user.getJWT();
-
       //add token to cookie and send response back to user
       res.cookie("token", token, {
         maxAge: 24 * 60 * 60 * 1000, //(24 hours in milliseconds)
@@ -66,6 +67,15 @@ authRouter.post("/login", async (req, res) => {
   } catch (error) {
     res.status(400).send(`${error}`);
   }
+});
+
+authRouter.post("/logout", async (req, res) => {
+  res.cookie("token", null, { maxAge: 0 });
+  res.send("User logged out");
+
+  //or
+
+  // res.cookie("token", null, { maxAge: 0 }).send("User logged out");
 });
 
 module.exports = authRouter;
