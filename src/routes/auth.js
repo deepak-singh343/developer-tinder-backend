@@ -44,12 +44,12 @@ authRouter.post("/login", async (req, res) => {
     const user = await User.findOne({ emailId });
     if (!user) {
       console.log("user not found");
-      throw new Error("Invalid credentials");
+      return res.status(400).send(`Invalid credentials`);
     }
     const isPasswordValid = await user.validatePassword(password);
     if (!isPasswordValid) {
       console.log("invalid password");
-      throw new Error("Invalid credentials");
+      return res.status(400).send(`Invalid credentials`);
     } else {
       //create jwt token
 
@@ -62,7 +62,8 @@ authRouter.post("/login", async (req, res) => {
       res.cookie("token", token, {
         maxAge: 24 * 60 * 60 * 1000, //(24 hours in milliseconds)
       });
-      res.send("login successfully");
+      delete user.password;
+      res.send({ status: 200, data: user, message: "login successfully" });
     }
   } catch (error) {
     res.status(400).send(`${error}`);

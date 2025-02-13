@@ -12,10 +12,11 @@ const USER_SAFE_FIELDS = [
   "gender",
   "about",
   "skills",
+  "photoUrl",
 ];
 
 //get all the pending connection requests for the logged in user
-userRouter.get("/user/request/received", userAuth, async (req, res) => {
+userRouter.get("/user/requests/received", userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;
     const connectionRequests = await ConnectionRequestModel.find({

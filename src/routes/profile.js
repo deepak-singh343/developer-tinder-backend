@@ -6,6 +6,7 @@ const profileRouter = express.Router();
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
   try {
     const user = req.user;
+    delete user.password;
     res.send({
       status: 200,
       data: user,
