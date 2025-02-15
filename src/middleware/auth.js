@@ -6,7 +6,7 @@ const userAuth = async (req, res, next) => {
     if (!token) {
       return res.status(401).send("Not authorized");
     }
-    const decodedMessage = await jwt.verify(token, "deepak@1234");
+    const decodedMessage = await jwt.verify(token, process.env.JWT_SECRET);
     const { _id } = decodedMessage;
     const user = await User.findById({ _id });
     if (!user) {

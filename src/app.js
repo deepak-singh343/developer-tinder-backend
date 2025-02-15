@@ -1,4 +1,5 @@
 const express = require("express");
+require("dotenv").config();
 const connectDB = require("./config/database");
 const bcrypt = require("bcrypt");
 const User = require("./models/user");
@@ -180,7 +181,7 @@ app.use("/", userRouter);
 connectDB()
   .then(() => {
     console.log("Connection established successfully");
-    app.listen(3000, () => {
+    app.listen(process.env.PORT, () => {
       console.log(`server is running on port 3000`);
     });
   })

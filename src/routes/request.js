@@ -4,6 +4,8 @@ const ConnectionRequestModel = require("../models/connectionRequest");
 const User = require("../models/user");
 const requestRouter = express.Router();
 
+const sendEmail = require("../utils/sendEmail");
+
 requestRouter.post(
   "/request/send/:status/:toUserId", //interested or ignored
   userAuth,
@@ -50,7 +52,10 @@ requestRouter.post(
         toUserId,
         status,
       });
-      const data = await connectionRequest.save();
+      const mailRes = await sendEmail.run();
+      console.log(mailRes);
+      // const data = await connectionRequest.save();
+
       res.send({
         status: 200,
         data,
