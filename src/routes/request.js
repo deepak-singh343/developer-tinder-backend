@@ -53,8 +53,7 @@ requestRouter.post(
         status,
       });
       const mailRes = await sendEmail.run();
-      console.log(mailRes);
-      // const data = await connectionRequest.save();
+      const data = await connectionRequest.save();
 
       res.send({
         status: 200,

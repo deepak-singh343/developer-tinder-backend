@@ -43,13 +43,10 @@ const run = async () => {
     "cse12312.sbit@gmail.com",
     "deepak@meproject.site"
   );
-  console.log("sendEmailCommand", sendEmailCommand);
   try {
     const data = await sesClient.send(sendEmailCommand);
-    console.log("data", data);
     return data;
   } catch (caught) {
-    console.log("caught", caught);
     if (caught instanceof Error && caught.name === "MessageRejected") {
       const messageRejectedError = caught;
       return messageRejectedError;
